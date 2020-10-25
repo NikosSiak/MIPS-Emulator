@@ -1,9 +1,13 @@
+import { labels } from "./tmp.js";
+
 const KEYWORDS = new RegExp(['(add\\.[sd]?|add[i]?[u]?|and[i]?|beq|bne|j[r]?|jal|l[ailw]|lbu|lhu|lui|nor|or[i]?',
                             '|slt[i]?[u]?|s[lr]l|s[bchw]|sub[u]?|bc1[tf]?|mult[u]?|div[u]?',
                             '|mfhi|mflo|mfc0|blt|bgt|ble|move|syscall)'].join(''));
 const REGISTER = new RegExp(/(zero|at|v[01]|a[0-3]|t[0-9]|s[0-7]|k[01]|[gsf]p|ra)/);
 const DECLARATIONS = new RegExp(/data|text|word|ascii[z]?|byte|align|half|space|double|float|extern|kdata|ktext|globl|set|eqv|macro|end_macro|include/);
 const LABEL = new RegExp(/([a-zA-Z]\d*)+\s*:/);
+const WORD = new RegExp(/([a-zA-Z]\d*)/);
+
 
 export default function mips() {
     return {
@@ -49,6 +53,7 @@ export default function mips() {
             }
 
             if (stream.match(LABEL)) {
+                labels.add(stream.string.slice(0, -1).trim());
                 return "label";
             }
 
@@ -60,6 +65,10 @@ export default function mips() {
                 return "keyword";
             }
             stream.next();
+
+            if (stream.match(WORD)) {
+                return "word";
+            }
         }
     };
 };
