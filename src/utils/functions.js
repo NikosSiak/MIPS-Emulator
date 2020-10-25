@@ -1,8 +1,13 @@
 export function calculateFileName(files, name) {
     let [fileName, fileExt] = name.split(".", 2);
-    let fileNameRegex = new RegExp(`${fileName}(\\([0-9]+\\))?\\.${fileExt}`);
-    console.log(fileNameRegex);
-    let sameNameFiles = files.filter((file) => fileNameRegex.test(file.fileName));
 
-    return `${fileName}(${sameNameFiles.length}).${fileExt}`;
+    if (!files.find(file => file.fileName === name)) return name;
+    
+    let i = 1;
+    let newFileName = '';
+    do {
+        newFileName = `${fileName}(${i++}).${fileExt}`
+    } while (files.find(file => file.fileName === newFileName));
+    
+    return newFileName;
 }
