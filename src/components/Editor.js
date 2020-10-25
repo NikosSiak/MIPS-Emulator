@@ -25,7 +25,7 @@ const Editor = () => {
     const handleEditorChange = (editor, data, value) => {
         dispatch({
             type: actions.SET_EDITOR,
-            payload: { content: value, currentFile },
+            payload: { content: value },
         });
     };
 

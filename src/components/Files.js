@@ -20,8 +20,8 @@ const Files = () => {
         dispatch({ type: actions.NEW_FILE });
     };
 
-    const handleCloseFile = () => {
-        dispatch({ type: actions.CLOSE_FILE, payload: currentFile });
+    const handleCloseFile = (index) => {
+        dispatch({ type: actions.CLOSE_FILE, payload: index });
     };
 
     return (
@@ -30,17 +30,20 @@ const Files = () => {
                 {files.map((file, index) => (
                     <Tab
                         key={index}
+                        component="div"
                         label={
                             <div style={{ display: "flex" }}>
                                 {file.fileName}
-                                <CloseIcon
-                                    fontSize="small"
-                                    // style={{ paddingBottom: 5 }}
-                                    onClick={handleCloseFile}
-                                />
+                                {files.length !== 1 ? 
+                                    <CloseIcon
+                                        fontSize="small"
+                                        // style={{ paddingBottom: 5 }}
+                                        onClick={() => handleCloseFile(index)}
+                                    />
+                                : null}
                             </div>
                         }
-                        onClick={() => dispatch({ type: actions.CHANGE_FILE, payload: index })}
+                        onClick={(e) => dispatch({ type: actions.CHANGE_FILE, payload: { index, target: e.target }})}
                         style={{ textTransform: "none" }}
                     />
                 ))}

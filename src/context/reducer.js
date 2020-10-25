@@ -5,16 +5,9 @@ export const reducer = (state, { type, payload }) => {
     switch (type) {
         // handle editor
         case actions.SET_EDITOR:
+            state.editor.files[state.editor.currentFile].content = payload.content;
             return {
                 ...state,
-                editor: {
-                    ...state.editor,
-                    files: state.editor.files.map((file, index) => {
-                        if (index === payload.currentFile) {
-                            return { ...file, content: payload.content };
-                        } else return file;
-                    }),
-                },
             };
         // handle files
         case actions.OPEN_FILE:
@@ -33,15 +26,16 @@ export const reducer = (state, { type, payload }) => {
                 },
             };
         case actions.CLOSE_FILE:
-            console.log(payload);
-            console.log(state);
+            state.editor.files.splice(payload, 1);
             return {
                 ...state,
                 editor: {
-                    currentFile: state.editor.currentFile - 1,
-                    files: state.editor.files.filter((file) => file.id !== payload),
+                    currentFile: payload <= state.editor.currentFile && state.editor.currentFile !== 0 
+                        ? state.editor.currentFile - 1
+                        : state.editor.currentFile,
+                    files: state.editor.files,
                 },
-            };
+            };;
         case actions.NEW_FILE:
             const { files } = state.editor;
 
@@ -52,18 +46,20 @@ export const reducer = (state, { type, payload }) => {
                     files: [
                         ...state.editor.files,
                         {
-                            id: state.editor.files.length,
                             content: "",
                             fileName: calculateFileName(files, "Untitled.asm"),
                         },
                     ],
                 },
-            };
+            };;
         case actions.CHANGE_FILE:
-            return {
-                ...state,
-                editor: { ...state.editor, currentFile: payload },
-            };
+            if (payload.target.tagName === "DIV") {
+                return {
+                    ...state,
+                    editor: { ...state.editor, currentFile: payload.index },
+                };
+            }
+            return { ...state };
         // handle editor settings
         case actions.CHANGE_THEME:
             return { ...state, editorSettings: { ...state.editorSettings, theme: payload } };
