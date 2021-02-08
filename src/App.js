@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import styled from "styled-components";
 
@@ -7,7 +7,22 @@ import Terminal from "./components/Terminal";
 import Editor from "./components/Editor";
 import Sidebar from "./components/Sidebar";
 
+async function loadWasm() {
+    try {
+        return import("emulator-wasm");
+    }
+    catch (err) {
+        console.error(`Unexpected error in loadWasm. [Message: ${err.message}]`);
+    }
+}
+
 function App() {
+    const [wasm, setWasm] = useState(null);
+
+    useEffect(() => {
+        loadWasm().then(setWasm);
+    }, [])
+
     return (
         <StyledApp>
             <Navigation />
