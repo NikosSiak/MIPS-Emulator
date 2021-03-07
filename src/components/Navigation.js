@@ -17,7 +17,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import SkipNextTwoToneIcon from "@material-ui/icons/SkipNextTwoTone";
 import FolderOpenTwoToneIcon from "@material-ui/icons/FolderOpenTwoTone";
 
-const Navigation = () => {
+const Navigation = ({wasm}) => {
     const [state, dispatch] = useContext(Context);
     const [anchorElMenu, setAnchorElMenu] = useState(null);
     const [anchorElFontSize, setAnchorElFontSize] = useState(null);
@@ -142,6 +142,7 @@ const Navigation = () => {
                 variant="outlined"
                 aria-haspopup="true"
                 endIcon={<PlayArrowIcon />}
+                onClick={() => { wasm.test(() => { console.log("test") }) }}
             >
                 Run
             </Button>

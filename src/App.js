@@ -25,7 +25,7 @@ function App() {
 
     return (
         <StyledApp>
-            <Navigation />
+            <Navigation wasm={wasm}/>
             <Column>
                 <Row>
                     <Editor />
